@@ -1,18 +1,61 @@
 object Form1: TForm1
-  Left = 353
+  Left = 355
   Height = 240
-  Top = 62
+  Top = 61
   Width = 320
-  Caption = 'Form1'
+  Caption = 'Import eksport arkusza'
   ClientHeight = 240
   ClientWidth = 320
   LCLVersion = '1.6.0.4'
   object Label1: TLabel
-    Left = 24
-    Height = 17
-    Top = 17
-    Width = 45
-    Caption = 'Label1'
+    Left = 8
+    Height = 56
+    Top = 8
+    Width = 296
+    AutoSize = False
+    Caption = 'Program tworzy skoroszyt zawierający statystyki opisowe danych zawartych w innym skoroszycie'
     ParentColor = False
+    WordWrap = True
+  end
+  object Label2: TLabel
+    Left = 8
+    Height = 135
+    Top = 57
+    Width = 296
+    AutoSize = False
+    Caption = 'Tutaj pojawią się informacje diagnostyczne'
+    Font.Height = -11
+    Font.Name = 'Sans'
+    ParentColor = False
+    ParentFont = False
+    WordWrap = True
+  end
+  object Button1: TButton
+    Left = 8
+    Height = 25
+    Top = 200
+    Width = 120
+    Caption = 'Wczytaj'
+    OnClick = Button1Click
+    TabOrder = 0
+  end
+  object Button2: TButton
+    Left = 184
+    Height = 25
+    Top = 200
+    Width = 120
+    Caption = 'Zakończ'
+    OnClick = Button2Click
+    TabOrder = 1
+  end
+  object OpenDialog1: TOpenDialog
+    DefaultExt = '.xlsx'
+    Filter = 'Skoroszyt Excel|*.xlsx|Stary format Excel|*.xls'
+    left = 32
+    top = 136
+  end
+  object SaveDialog1: TSaveDialog
+    left = 120
+    top = 136
   end
 end

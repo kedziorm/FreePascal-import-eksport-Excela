@@ -12,7 +12,14 @@ type
   { TForm1 }
 
   TForm1 = class(TForm)
+    Button1: TButton;
+    Button2: TButton;
     Label1: TLabel;
+    Label2: TLabel;
+    OpenDialog1: TOpenDialog;
+    SaveDialog1: TSaveDialog;
+    procedure Button1Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
   private
     { private declarations }
   public
@@ -25,6 +32,17 @@ var
 implementation
 
 {$R *.lfm}
+
+{ TForm1 }
+
+procedure TForm1.Button2Click(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TForm1.Button1Click(Sender: TObject);
+begin
+end;
 
 end.
 
