@@ -5,7 +5,7 @@ unit Unit1;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls, fpSpreadsheet;
+  Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls, fpstypes, fpSpreadsheet, laz_fpspreadsheet;
 
 type
 
@@ -35,6 +35,12 @@ var
   arkusz_out: TsWorksheet;
   arkusz_in: TsWorksheet;
   i: Integer;
+  suma: real;
+  srednia: real;
+  komorka: PCell;
+  ostatniWiersz: Integer;
+  ostatniaKolumna: Integer;
+  wiersz: Integer;
 
 
 implementation
@@ -53,22 +59,61 @@ begin
      if OpenDialog1.Execute then
      begin
            NazwaPliku := OpenDialog1.FileName;
-           Diag := Concat('Nazwa pliku: ', NazwaPliku);
+           Diag := Concat('Nazwa skoroszytu: ', NazwaPliku);
            Label2.Caption:=Diag;
 
            skoroszyt_in := TsWorkbook.Create;
            skoroszyt_in.ReadFromFile(NazwaPliku);
 
+           // Utworzenie arkusza wyjściowego
+           skoroszyt_out := TsWorkbook.Create;
+           arkusz_out := skoroszyt_out.AddWorksheet('Wyniki');
+
+           // Zapisanie nagłówka w arkuszu wyjściowym
+           arkusz_out.WriteUTF8Text(0,0, 'Nazwa arkusza');
+           arkusz_out.WriteBorders(0,0, [cbNorth, cbSouth]);
+           komorka := arkusz_out.WriteUTF8Text(0,1, 'Suma');
+           arkusz_out.WriteBackground(komorka, fsThinStripeHor, scBlue, scYellow);
+           komorka :=arkusz_out.WriteUTF8Text(0,2, 'Średnia');
+           arkusz_out.WriteBackground(komorka, fsThinStripeHor, scCyan, scBlack);
+
+
            for i := 0 to skoroszyt_in.GetWorksheetCount() - 1 do
              begin
                arkusz_in := skoroszyt_in.GetWorksheetByIndex(i);
-               Diag := Diag + LineEnding +  arkusz_in.Name;
-               Label2.Caption:=Diag;
-               //ShowMessage(arkusz_in.Name);
-               // Do something with MyWorksheet
+
+               ostatniaKolumna := arkusz_in.GetLastColIndex();
+               ostatniWiersz := arkusz_in.GetLastRowIndex();
+
+               suma:=0;
+               // obliczenie sumy wartości w ostatniej kolumnie
+               for wiersz := 1 to ostatniWiersz do
+                   begin
+                     suma:= suma + arkusz_in.ReadAsNumber(wiersz,ostatniaKolumna);
+                   end;
+               srednia:= suma / ostatniWiersz;
+               ///////////////////////////////////////////////////
+               Diag := Concat(Diag, LineEnding, 'Nazwa: ', arkusz_in.Name,
+                    ' l. wierszy: ', IntToStr(ostatniWiersz),
+                    ' l. kolumn: ', IntToStr(ostatniaKolumna + 1));
+               Label2.Caption :=Diag;
+
+               arkusz_out.WriteUTF8Text(i + 1,0, arkusz_in.Name);
+               arkusz_out.WriteNumber(i+1, 1, suma);
+               arkusz_out.WriteNumber(i+1, 2, srednia);
+
              end;
 
            skoroszyt_in.Free;
+
+           // Zapis do arkusza wyjściowego:
+           if SaveDialog1.Execute then
+           begin
+                 skoroszyt_out.WriteToFile(SaveDialog1.Filename);
+           end;
+
+           skoroszyt_out.Free;
+
      end;
 end;
 
