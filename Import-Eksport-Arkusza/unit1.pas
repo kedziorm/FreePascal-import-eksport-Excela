@@ -55,18 +55,20 @@ begin
            NazwaPliku := OpenDialog1.FileName;
            Diag := Concat('Nazwa pliku: ', NazwaPliku);
            Label2.Caption:=Diag;
-           // PROBLEM: Regardling of opening XLSX or XLS I get the same error message
+
+           skoroszyt_in := TsWorkbook.Create;
            skoroszyt_in.ReadFromFile(NazwaPliku);
 
            for i := 0 to skoroszyt_in.GetWorksheetCount() - 1 do
-           begin
-             arkusz_in := skoroszyt_in.GetWorksheetByIndex(i);
-             ShowMessage(arkusz_in.Name);
-             // Do something with MyWorksheet
-           end;
+             begin
+               arkusz_in := skoroszyt_in.GetWorksheetByIndex(i);
+               Diag := Diag + LineEnding +  arkusz_in.Name;
+               Label2.Caption:=Diag;
+               //ShowMessage(arkusz_in.Name);
+               // Do something with MyWorksheet
+             end;
 
-           // Is it a method to close the workbook?
-           skoroszyt_in.Destroy;
+           skoroszyt_in.Free;
      end;
 end;
 
