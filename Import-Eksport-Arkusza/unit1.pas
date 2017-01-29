@@ -5,7 +5,7 @@ unit Unit1;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls;
+  Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls, fpSpreadsheet;
 
 type
 
@@ -28,6 +28,14 @@ type
 
 var
   Form1: TForm1;
+  NazwaPliku: string;
+  Diag: string;
+  skoroszyt_out: TsWorkbook;
+  skoroszyt_in: TsWorkbook;
+  arkusz_out: TsWorksheet;
+  arkusz_in: TsWorksheet;
+  i: Integer;
+
 
 implementation
 
@@ -42,6 +50,24 @@ end;
 
 procedure TForm1.Button1Click(Sender: TObject);
 begin
+     if OpenDialog1.Execute then
+     begin
+           NazwaPliku := OpenDialog1.FileName;
+           Diag := Concat('Nazwa pliku: ', NazwaPliku);
+           Label2.Caption:=Diag;
+           // PROBLEM: Regardling of opening XLSX or XLS I get the same error message
+           skoroszyt_in.ReadFromFile(NazwaPliku);
+
+           for i := 0 to skoroszyt_in.GetWorksheetCount() - 1 do
+           begin
+             arkusz_in := skoroszyt_in.GetWorksheetByIndex(i);
+             ShowMessage(arkusz_in.Name);
+             // Do something with MyWorksheet
+           end;
+
+           // Is it a method to close the workbook?
+           skoroszyt_in.Destroy;
+     end;
 end;
 
 end.

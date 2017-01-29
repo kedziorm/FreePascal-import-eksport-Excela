@@ -50,11 +50,13 @@ object Form1: TForm1
   end
   object OpenDialog1: TOpenDialog
     DefaultExt = '.xlsx'
-    Filter = 'Skoroszyt Excel|*.xlsx|Stary format Excel|*.xls'
+    Filter = 'Skoroszyt Excel (*.xlsx)|*.xlsx|Stary format Excel (*.xls)|*.xls'
     left = 32
     top = 136
   end
   object SaveDialog1: TSaveDialog
+    DefaultExt = '.xlsx'
+    Filter = 'Skoroszyt Excel (*.xlsx)|*.xlsx|Stary format Excel (*.xls)|*.xls'
     left = 120
     top = 136
   end
