@@ -2,9 +2,9 @@
 Próba napisania programu w zintegrowanym środowisku programistycznym Lazarus, który importuje i eksportuje skoroszyty programu Excel.
 
 ### Kroki wykonywane przez program
-1. Wczytanie danych ze wskazanego skoroszytu programu Excel
-2. Obliczenie sumy i średniej (jeśli się uda także innych statystyk opisowych) - osobno dla **każdego** arkusza wewnątrz skoroszytu.
-3. Zapytanie użytkowanika do jakiego pliku program ma zapisać wynik
+1. Wczytanie danych ze wskazanego skoroszytu programu Excel.
+2. Obliczenie sumy i średniej (jeśli się uda także innych statystyk opisowych) - osobno dla **każdego** arkusza wewnątrz skoroszytu (zakłada się, że pierwszy wiersz zawiera nagłówki, a dane są w ostatniej kolumnie z danymi).
+3. Zapytanie użytkownika do jakiego pliku program ma zapisać wynik
 4. Utworzenie nowego arkusza z wynikiem.
 
 ### Instalacja FPSpreadsheet
@@ -14,6 +14,6 @@ biblioteka FPSpreadsheet powinna umożliwić swobodne odczytywanie i zapisywanie
 Niestety nie można jej zainstalować przez opcję w menu "Package --> Install/Uninstall Packages"
 
 W związku z tym wykonano następujące kroki:
-1. Pobrano archiwum z biblioteką https://sourceforge.net/projects/lazarus-ccr/files/FPSpreadsheet/ i rozpakowano je
+1. Pobrano archiwum z biblioteką https://sourceforge.net/projects/lazarus-ccr/files/FPSpreadsheet/ i rozpakowano je (Lepiej chyba wziąć aktualną wersję z https://github.com/tcs-ulli/fpspreadsheet).
 2. Package ---> Open Package File
 3. Wykonano kompilację i dodano plik do projektu (więcej szczegółów można znaleźć na załączonych zrzutach ekranu)
