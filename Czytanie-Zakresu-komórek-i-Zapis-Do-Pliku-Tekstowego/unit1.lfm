@@ -45,6 +45,7 @@ object Form1: TForm1
     Top = 80
     Width = 240
     AutoSize = False
+    Caption = 'Program odczytuje wartości komórek z podanego'#13#10'zakresu w pierwszym arkuszu wskazanego pliku,'#13#10'pokazuje sumę, średnią i liczbę komórek'#13#10'oraz zapisuje tablicę do wskazanego'#13#10'pliku tekstowego'
     ParentColor = False
   end
   object btnCzytaj: TButton
@@ -53,6 +54,7 @@ object Form1: TForm1
     Top = 184
     Width = 75
     Caption = 'Czytaj'
+    OnClick = btnCzytajClick
     TabOrder = 1
   end
   object btnZamknij: TButton
@@ -65,10 +67,12 @@ object Form1: TForm1
     TabOrder = 2
   end
   object OpenDialog1: TOpenDialog
+    Filter = 'Skoroszyt Excel (*.xlsx)|*.xlsx|Stary format Excel (*.xls)|*.xls'
     left = 104
     top = 184
   end
   object SaveDialog1: TSaveDialog
+    Filter = 'Plik tekstowy|*.txt'
     left = 160
     top = 184
   end
