@@ -43,6 +43,23 @@ var
 
 implementation
 
+function ZnajdzKomorkePoAdresie(adres: string; Arkusz: TsWorksheet) : PCell;
+  begin
+    Result:= Arkusz.FindCell(adres);
+  end;
+
+function CzytajWartoscKomorkiPoAdresie(adres: string;
+         Arkusz: TsWorksheet) : Real;
+// Przykład użycia:
+// CzytajWartoscKomorkiPoAdresie(Arkusz, 'B2')
+// zwróci wartość (liczbę) w komórce B2
+// Ta funkcja jest nieużywana, została napisana tylko w celach demonstracyjnych
+begin
+  Result:= Arkusz.ReadAsNumber(
+            ZnajdzKomorkePoAdresie(adres,Arkusz)
+            );
+end;
+
 function CzytajZakresKomorek
           (Arkusz: TsWorksheet; komorka_s : string; komorka_k: string = '')
                         : tablicaZInformacjami;
@@ -51,7 +68,7 @@ function CzytajZakresKomorek
  // zwróci tablicę liczb z zakresu B2:F3 wraz ze statystykami
 
   var
-    ostatniaKolumna, ostatniWiersz, wiersz, kolumna : integer;
+    ostatniaKolumna, ostatniWiersz, pierwszyWiersz, pierwszaKolumna, wiersz, kolumna : integer;
     komorka : PCell;
     suma, liczbaKomorek, srednia : Real;
     tablica : Tablica_dynamiczna;
@@ -63,7 +80,8 @@ function CzytajZakresKomorek
          exit;
        end;
 
-    komorka := Arkusz.FindCell(komorka_s);
+    komorka :=
+    ZnajdzKomorkePoAdresie(komorka_s, Arkusz);
 
     if ( komorka_k = '' ) or ( Arkusz.FindCell(komorka_k) = nil ) then
        begin
@@ -77,12 +95,14 @@ function CzytajZakresKomorek
       end;
 
     suma:=0; srednia:=0; liczbaKomorek:=0;
-    SetLength(tablica,ostatniWiersz - komorka^.Row + 1,ostatniaKolumna - komorka^.Col + 1);
-    for wiersz := komorka^.Row to ostatniWiersz do
+    pierwszyWiersz:= komorka^.Row; pierwszaKolumna:= komorka^.Col;
+    SetLength(tablica,ostatniWiersz - pierwszyWiersz + 1,ostatniaKolumna - pierwszaKolumna + 1);
+
+    for wiersz := pierwszyWiersz to ostatniWiersz do
         begin
-        for kolumna := komorka^.Col to ostatniaKolumna do
+        for kolumna := pierwszaKolumna to ostatniaKolumna do
             begin
-              tablica[wiersz - komorka^.Row, kolumna - komorka^.Col] :=
+              tablica[wiersz - pierwszyWiersz, kolumna - pierwszaKolumna] :=
                           Arkusz.ReadAsNumber(wiersz,kolumna);
               suma:= suma + Arkusz.ReadAsNumber(wiersz,kolumna);
               liczbaKomorek:= liczbaKomorek + 1;
