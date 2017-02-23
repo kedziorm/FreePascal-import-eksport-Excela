@@ -79,16 +79,18 @@ function CzytajZakresKomorek
     suma:=0; srednia:=0; liczbaKomorek:=0;
     SetLength(tablica,ostatniWiersz - komorka^.Row + 1,ostatniaKolumna - komorka^.Col + 1);
     for wiersz := komorka^.Row to ostatniWiersz do
+        begin
         for kolumna := komorka^.Col to ostatniaKolumna do
             begin
               tablica[wiersz - komorka^.Row, kolumna - komorka^.Col] :=
                           Arkusz.ReadAsNumber(wiersz,kolumna);
-              suma:=Arkusz.ReadAsNumber(wiersz,kolumna);
-              liczbaKomorek:=liczbaKomorek + 1;
+              suma:= suma + Arkusz.ReadAsNumber(wiersz,kolumna);
+              liczbaKomorek:= liczbaKomorek + 1;
             end;
+        end;
     srednia:=suma/liczbaKomorek;
 
-    Result.tablica:=tablica;
+    Result.tablica:= tablica;
     Result.statystyki:='Suma: ' + FloatToStr(suma)
     + LineEnding + 'Średnia: ' + FloatToStr(srednia)
     + LineEnding + 'Liczba komórek: ' +FloatToStr(liczbaKomorek);
@@ -100,22 +102,25 @@ const
   // Tabulator jako separator liczb:
   separator = Char(9);
 var
-	wiersz, kolumna: integer;
+	wiersz, kolumna, wiersz_min, wiersz_maks, kol_min, kol_maks : integer;
 	linia : String;
 	listaCiagowZnakow: TStringList;
 begin
   If not FileExists(sciezkaDoPliku) Then
     begin
       listaCiagowZnakow := TStringList.Create;
-      for wiersz := Low(tablica) to high(tablica) do
+      wiersz_min:= Low(tablica); wiersz_maks:= high(tablica);
+      kol_min:= Low(tablica[1]); kol_maks:= high(tablica[1]);
+      for wiersz := wiersz_min to wiersz_maks do
       begin
         linia := '';
-        for kolumna := Low(tablica[1]) to high(tablica[1]) do
+        for kolumna := kol_min to kol_maks do
         begin
           linia := linia + FloatToStr(tablica[wiersz, kolumna]) + separator;
-          Delete (linia,Length(linia),1);
-          listaCiagowZnakow.Add(linia);
         end;
+        // Ostatni separator jest nadmiarowy
+        Delete (linia,Length(linia),1);
+        listaCiagowZnakow.Add(linia);
       end;
       listaCiagowZnakow.SaveToFile(sciezkaDoPliku);
       listaCiagowZnakow.Free;
@@ -151,8 +156,8 @@ begin
     begin
        mojSkoroszyt.ReadFromFile(OpenDialog1.FileName);
        mojArkusz := mojSkoroszyt.GetWorksheetByIndex(0);
-       mojaTablica:=CzytajZakresKomorek(mojArkusz,pierwsza,druga);
-       lblStatystyki.Caption:=mojaTablica.statystyki;
+       mojaTablica:= CzytajZakresKomorek(mojArkusz,pierwsza,druga);
+       lblStatystyki.Caption:= mojaTablica.statystyki;
 
        if SaveDialog1.Execute then
          ZapiszTabliceDoPlikuTekstowego(
